@@ -28,6 +28,7 @@ public:
     awaitable_future(awaitable_future &&other) noexcept
         : inner_(std::move(other.inner_)) {}
 
+    /// Checks whether the internal std::future is ready
     [[nodiscard]] bool is_ready() const final {
         return inner_.wait_for(std::chrono::steady_clock::duration::zero()) == std::future_status::ready;
     }
@@ -37,7 +38,7 @@ public:
         return inner_.wait_for(std::chrono::steady_clock::duration::zero()) == std::future_status::ready;
     }
 
-    /// Called once if @ref await_ready returned false
+    /// Called once if @ref sydney::awaitable_future::await_ready returned false
     void await_suspend(const std::coroutine_handle<> &handle) {
         // Tell the scheduler to wait for this before continuing the current coroutine
         scheduler::get_local_scheduler()->set_task_pollable(this);

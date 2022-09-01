@@ -11,6 +11,11 @@
 
 namespace sydney {
 
+/**
+ * @brief sydney's base pollable class
+ *
+ * Is used to signal whether a coroutine should continue executing after suspending
+ */
 class pollable {
 public:
     [[nodiscard]] virtual bool is_ready() const = 0;

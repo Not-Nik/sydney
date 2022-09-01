@@ -9,18 +9,23 @@
 #include <sydney/pollable.h>
 
 namespace sydney {
-class always_ready_pollable : public pollable {
+
+namespace pollable_specialisations {
+class always_ready_pollable : public ::sydney::pollable {
 public:
+    /// Always returns true
     [[nodiscard]] bool is_ready() const final { return true; }
 };
 
-class never_ready_pollable : public pollable {
+class never_ready_pollable : public ::sydney::pollable {
 public:
+    /// Always returns false
     [[nodiscard]] bool is_ready() const final { return false; }
 };
+}
 
-static always_ready_pollable ar_pollable;
-static never_ready_pollable nr_pollable;
+static pollable_specialisations::always_ready_pollable ar_pollable;
+static pollable_specialisations::never_ready_pollable nr_pollable;
 
 pollable *pollable::always_ready = &ar_pollable;
 pollable *pollable::never_ready = &nr_pollable;

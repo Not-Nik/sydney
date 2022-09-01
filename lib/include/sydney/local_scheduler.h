@@ -27,6 +27,11 @@ struct resumable_coroutine {
 };
 }
 
+/**
+ * @brief The per-thread coroutine scheduler
+ *
+ * @todo Use several of these to balance coroutines between threads
+ */
 class local_scheduler {
     template <class T>
     friend class awaitable_future;
@@ -40,7 +45,16 @@ public:
     local_scheduler(const local_scheduler &) = delete;
     local_scheduler(local_scheduler &&) = delete;
 
+    /**
+     * @brief Start executing all coroutines added with @ref sydney::local_scheduler::add_task
+     */
     void start();
+
+    /**
+     * @brief Execute @a coro using this scheduler
+     *
+     * @param coro Coroutine to execute
+     */
     void add_task(std::coroutine_handle<> coro);
 };
 } // sydney
